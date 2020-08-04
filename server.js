@@ -50,6 +50,10 @@ app.post("/work", function(req,res){
   res.redirect("/work");
 });
 
+app.get("/about", function(req, res){
+  res.render("about");
+});
+
 app.listen("8080", function(){
   console.log("Server is running at port 8080");
 });
