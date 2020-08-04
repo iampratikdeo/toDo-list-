@@ -8,11 +8,10 @@
     <h1> <%= KindOfDay %> </h1>
 
     <ul>
-      <li>Buy Food</li>
-      <li>cook Food</li>
-      <li>eat Food</li>
-    </ul>
-
+  <%  for(var i = 0; i < Newitem.length; i++){ %>
+      <li> <%= Newitem[i] %> </li>
+  <%  } %>
+  </ul>
     <form class="" action="/" method="post">
       <input type="text" name="newItem">
       <button type="submit" name="button">Add</button>
