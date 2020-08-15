@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const app = express();
 var items = [];
@@ -8,22 +9,35 @@ var workList = [];
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
+mongoose.connect("mongodb://localhost:27017/todoListDB", {useNewUrlParser: true , useUnifiedTopology: true});
+const itemSchema = new mongoose.Schema({
+  name: String
+});
+
+const itemModel = mongoose.model("Item", itemSchema);
+
+const item1 = new itemModel({
+  name: "Buy Grcoeries"
+});
+
+const item2 = new itemModel({
+  name: "FInish mongoose"
+});
+
+const item3 = new itemModel({
+  name: "Eat food"
+});
+const defaultItems = [item1, item2, item3];
+
+itemModel.insertMany(defaultItems, function(err){
+  if(err){
+    console.log(err);
+  } else console.log("insert successful");
+});
+
 app.get("/", function(req, res){
-  var today = new Date();
-  var currentDay = today.getDay();
-  var day = "";
-  var days = ["Sunday","Monday", "tuesday", "Wednesday", "Thursday", "Friday",
-              "Saturday"];
 
-  var options = {
-    weekday: "long",
-    day: "numeric",
-    month: "long"
-  };
-
-  var day_new = today.toLocaleDateString("en-US", options);
-
-  res.render("list", {listTitle:day_new, Newitem: items});
+  res.render("list", {listTitle:"Today", Newitem: items});
 
 });
 
