@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const app = express();
-var items = [];
+
 var workList = [];
 
 app.set('view engine', 'ejs');
@@ -29,15 +29,28 @@ const item3 = new itemModel({
 });
 const defaultItems = [item1, item2, item3];
 
-itemModel.insertMany(defaultItems, function(err){
-  if(err){
-    console.log(err);
-  } else console.log("insert successful");
-});
+
+
+
 
 app.get("/", function(req, res){
 
-  res.render("list", {listTitle:"Today", Newitem: items});
+
+  itemModel.find({}, function(err, foundItems){
+
+      if(foundItems.length === 0 ){
+        itemModel.insertMany(defaultItems, function(err){
+          if(err){
+            console.log(err);
+          } else console.log("insert successful");
+        });
+        res.redirect("/");
+      } else {
+        res.render("list", {listTitle:"Today", Newitem: foundItems});
+      }
+  });
+
+
 
 });
 
