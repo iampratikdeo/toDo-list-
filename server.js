@@ -55,16 +55,27 @@ app.get("/", function(req, res){
 });
 
 app.post("/", function(req,res){
-  console.log(req.body.list);
-  var item = req.body.newItem;
-  if(req.body.list === "Work"){
-    workList.push(item);
-    res.redirect("/work");
+    const itemName = req.body.newItem;
 
-  } else {
-    items.push(item);
+    const item = new itemModel({
+      name: itemName
+    });
+    item.save();
     res.redirect("/");
-  }
+});
+
+app.post("/delete", function(req,res){
+
+  const deleteitemId = req.body.deleteItem;
+
+  itemModel.findByIdAndRemove(deleteitemId, function(err){
+    if(!err){
+      console.log("deleted");
+      res.redirect("/");
+    } else console.log(err);
+  });
+
+
 });
 
 app.get("/work", function(req, res){
